@@ -26,7 +26,7 @@ public class Pruebas3a {
 		}
 		
 		//borrar contenido
-		f2.borrarContenidoFichero();
+		//f2.borrarContenidoFichero();
 		// leer a entre 2 lineas fichero vacio para saltar excepcion
 		for (String linea : f2.leer(7,12)) {
 			System.out.println(linea);

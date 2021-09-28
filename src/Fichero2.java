@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -128,7 +127,6 @@ public class Fichero2 {
 
 	public String[] leer() {
 		String linea = "";
-		int i = 0;
 		String contenido[];
 		ArrayList<String> arrListContenido = new ArrayList<String>();
 		activarLectura();
@@ -139,12 +137,19 @@ public class Fichero2 {
 		} catch (IOException ioe) {
 			System.out.println("Error al leer linea: " + ioe.getMessage());
 		}
+		cerrarLectura();
 		//conversion de ArrayList a array, mejor practica devolver array
 		contenido = new String[arrListContenido.size()];
+		try {
+			if (contenido.length == 0) {
+				throw eNoHayContenido;
+			}
+		} catch (ExcepcionContenidoVacio ecv1) {
+			System.out.println(ecv1.getMessage());
+		}
 		for (int j = 0; j < contenido.length; j++) {
 			contenido[j] = arrListContenido.get(j);
 		}
-
 		return contenido;
 	}
 
@@ -171,8 +176,16 @@ public class Fichero2 {
 		} catch (IOException ioe) {
 			System.out.println("Error al leer linea: " + ioe.getMessage());
 		}
+		cerrarLectura();
 		//conversion de ArrayList a array, mejor practica devolver array
 		contenido = new String[arrListContenido.size()];
+		try {
+			if (contenido.length == 0) {
+				throw eNoHayContenido;
+			}
+		} catch (ExcepcionContenidoVacio ecv1) {
+			System.out.println(ecv1.getMessage());
+		}
 		for (int j = 0; j < contenido.length; j++) {
 			contenido[j] = arrListContenido.get(j);
 		}
@@ -205,6 +218,7 @@ public class Fichero2 {
 		}
 		//conversion de ArrayList a array, mejor practica devolver array
 		contenido = new String[arrListContenido.size()];
+		cerrarLectura();
 		for (int j = 0; j < contenido.length; j++) {
 			contenido[j] = arrListContenido.get(j);
 		}
