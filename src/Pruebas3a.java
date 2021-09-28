@@ -32,6 +32,10 @@ public class Pruebas3a {
 			System.out.println(linea);
 		}
 		System.out.println(f2);
+		
+		System.out.println("linea primera: " + f2.buscaPrimerElemento("escrita"));
+		System.out.println("linea ultima: " + f2.buscaUltimoElemento("12"));
+		System.out.println("n ocurrencias " + f2.numeroDeOcurrencias("escrita"));
 	}
 
 }

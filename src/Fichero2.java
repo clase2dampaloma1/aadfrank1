@@ -4,13 +4,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.File;
 
 public class Fichero2 {
 
-	private boolean seAnnade=true;
+	private boolean seAnnade = true;
 	private String ruta;
 	private String nombre;
-	
+
+	private File fichero;
 	private FileReader fr = null;
 	private FileWriter fw = null;
 	private BufferedWriter bw = null;
@@ -23,10 +25,45 @@ public class Fichero2 {
 	public Fichero2(String ruta) {
 		super();
 		this.ruta = ruta;
+		this.fichero = new File(ruta);
 		this.nombre = ruta.split("//")[ruta.split("//").length - 1];
 		eNoHayContenido = new ExcepcionContenidoVacio(this.nombre);
 		// borrar contenido anterior
 		borrarContenidoFichero();
+	}
+
+	/**
+	 * Borra el fichero si existe
+	 */
+
+	public void borrarFichero() {
+		if (fichero.exists()) {
+			fichero.delete();
+		}
+	}
+
+	/**
+	 * Crea el fichero si no existe
+	 */
+
+	public void crearFichero() {
+		if (!fichero.exists()) {
+			try {
+				fichero.createNewFile();
+			} catch (IOException e) {
+				System.out.println("Error al crear nuevo fichero: " + this.nombre + "  " + e.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * Si existe el fichero
+	 * 
+	 * @return
+	 */
+
+	public boolean existe() {
+		return fichero.exists();
 	}
 
 	/**
@@ -43,7 +80,7 @@ public class Fichero2 {
 		} finally {
 			try {
 				if (bwBorrar != null) {
-				bwBorrar.close();
+					bwBorrar.close();
 				}
 			} catch (IOException e2) {
 				System.out.println("Error interno al borrar el fichero: " + e2.getMessage());
@@ -57,7 +94,7 @@ public class Fichero2 {
 
 	private void activarEscritura() {
 		try {
-			fw = new FileWriter(this.ruta,seAnnade);
+			fw = new FileWriter(this.ruta, seAnnade);
 			bw = new BufferedWriter(fw);
 		} catch (IOException ioe) {
 			System.out.println("Error al activar escritura " + ioe.getMessage());
@@ -138,7 +175,7 @@ public class Fichero2 {
 			System.out.println("Error al leer linea: " + ioe.getMessage());
 		}
 		cerrarLectura();
-		//conversion de ArrayList a array, mejor practica devolver array
+		// conversion de ArrayList a array, mejor practica devolver array
 		contenido = new String[arrListContenido.size()];
 		try {
 			if (contenido.length == 0) {
@@ -177,7 +214,7 @@ public class Fichero2 {
 			System.out.println("Error al leer linea: " + ioe.getMessage());
 		}
 		cerrarLectura();
-		//conversion de ArrayList a array, mejor practica devolver array
+		// conversion de ArrayList a array, mejor practica devolver array
 		contenido = new String[arrListContenido.size()];
 		try {
 			if (contenido.length == 0) {
@@ -216,7 +253,7 @@ public class Fichero2 {
 		} catch (IOException ioe) {
 			System.out.println("Error al leer linea: " + ioe.getMessage());
 		}
-		//conversion de ArrayList a array, mejor practica devolver array
+		// conversion de ArrayList a array, mejor practica devolver array
 		contenido = new String[arrListContenido.size()];
 		cerrarLectura();
 		for (int j = 0; j < contenido.length; j++) {
@@ -231,8 +268,74 @@ public class Fichero2 {
 		}
 		return contenido;
 	}
+
+	/**
+	 * Busca primera ocurrencia
+	 * 
+	 * @param patron
+	 * @return
+	 */
+
+	public int buscaPrimerElemento(String patron) {
+		int i = 0, numeroDeLinea = 0;
+		boolean encontrado = false;
+		for (String linea : this.leer()) {
+			i++;
+			if (linea.contains(patron)) {
+				numeroDeLinea = i;
+				encontrado = true;
+				break;
+			}
+		}
+		if (!encontrado) {
+			numeroDeLinea = -1;
+		}
+		return numeroDeLinea;
+	}
+
+	/**
+	 * Busca ultima ocurrencia
+	 * 
+	 * @param patron
+	 * @return
+	 */
+
+	public int buscaUltimoElemento(String patron) {
+		int i = 0, numeroDeLinea = 0;
+		boolean encontrado = false;
+		for (String linea : this.leer()) {
+			i++;
+			if (linea.contains(patron)) {
+				numeroDeLinea = i;
+				encontrado = true;
+			}
+		}
+		if (!encontrado) {
+			numeroDeLinea = -1;
+		}
+		return numeroDeLinea;
+	}
+
+	/**
+	 * Devuelve numero de ocurrencias
+	 * 
+	 * @param patron
+	 * @return
+	 */
+
+	public int numeroDeOcurrencias(String patron) {
+		int numeroDeOcurrencias = 0;
+		for (String linea : this.leer()) {
+			if (linea.contains(patron)) {
+				numeroDeOcurrencias++;
+			}
+		}
+		return numeroDeOcurrencias;
+	}
+
 	/**
 	 * Devuelve el nombre del fichero sin ruta
+	 * 
 	 * @return
 	 */
 	public String getNombre() {
