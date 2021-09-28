@@ -279,15 +279,14 @@ public class Fichero2 {
 	public int buscaPrimerElemento(String patron) {
 		int i = 0, numeroDeLinea = 0;
 		boolean encontrado = false;
-		for (String linea : this.leer()) {
+		String[] todasLasLineasDelFichero;
+		todasLasLineasDelFichero = this.leer();
+		while (!(encontrado = (todasLasLineasDelFichero[i].contains(patron)))) {
 			i++;
-			if (linea.contains(patron)) {
-				numeroDeLinea = i;
-				encontrado = true;
-				break;
-			}
 		}
-		if (!encontrado) {
+		if (encontrado) {
+			numeroDeLinea = i;
+		} else {
 			numeroDeLinea = -1;
 		}
 		return numeroDeLinea;
@@ -332,6 +331,26 @@ public class Fichero2 {
 		}
 		return numeroDeOcurrencias;
 	}
+
+	/**
+	 * Borra el numero de linea indicado sobre el archivo inplace
+	 * 
+	 * @param numeroDeLineaBorrar
+	 */
+
+	public void borrarLinea(int numeroDeLineaBorrar) {
+		String parteDeArriba[], parteDeAbajo[];
+		parteDeArriba = this.leer(1, numeroDeLineaBorrar - 1);
+		parteDeAbajo = this.leer(numeroDeLineaBorrar + 1);
+		this.borrarContenidoFichero();
+		for (String linea : parteDeArriba) {
+			this.nuevaLinea(linea);
+		}
+		for (String linea : parteDeAbajo) {
+			this.nuevaLinea(linea);
+		}
+	}
+	
 
 	/**
 	 * Devuelve el nombre del fichero sin ruta
