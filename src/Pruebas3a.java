@@ -8,6 +8,11 @@ public class Pruebas3a {
 		for (int i = 1; i <= 15; i++) {
 			f2.nuevaLinea("Linea escrita con Fichero2 numero: " + i);
 		}
+		
+		
+		for (int i = 1; i <= 15; i++) {
+			f2.nuevaLinea("Linea escribida con Fichero2 numero: " + i);
+		}
 		// leer devuelve un array, que es iterable, se itera directamente sin asignar
 
 		// leer todo
@@ -47,6 +52,12 @@ public class Pruebas3a {
 		for (String linea : f2.leer()) {
 			System.out.println(linea);
 		}
+		f2.borrarLineasQueContienen("escribida");
+		for (String linea : f2.leer()) {
+			System.out.println(linea);
+		}
+		System.out.println(f2.buscaPrimerElemento("escri"));
+		
 	}
 
 }

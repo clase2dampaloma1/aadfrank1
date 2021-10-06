@@ -274,20 +274,27 @@ public class Fichero2 {
 	 * 
 	 * @param patron
 	 * @return
+	 * @throws ExcepcionContenidoVacio
 	 */
 
 	public int buscaPrimerElemento(String patron) {
-		int i = 0, numeroDeLinea = 0;
+		int i = 1, numeroDeLinea = 1;
 		boolean encontrado = false;
 		String[] todasLasLineasDelFichero;
 		todasLasLineasDelFichero = this.leer();
-		while (!(encontrado = (todasLasLineasDelFichero[i].contains(patron)))) {
+		while (!(encontrado = (todasLasLineasDelFichero[i - 1].contains(patron))) && i< todasLasLineasDelFichero.length) {
 			i++;
 		}
 		if (encontrado) {
 			numeroDeLinea = i;
 		} else {
 			numeroDeLinea = -1;
+			try {
+				throw eNoHayContenido;
+			} catch (ExcepcionContenidoVacio e) {
+				System.out.println(e.getMessage());
+			}
+
 		}
 		return numeroDeLinea;
 	}
@@ -340,9 +347,12 @@ public class Fichero2 {
 
 	public void borrarLinea(int numeroDeLineaBorrar) {
 		String parteDeArriba[], parteDeAbajo[];
+		// asignar lo que no es la linea a borrar
 		parteDeArriba = this.leer(1, numeroDeLineaBorrar - 1);
 		parteDeAbajo = this.leer(numeroDeLineaBorrar + 1);
+		// borrar todo
 		this.borrarContenidoFichero();
+		// escribir todo de nuevo menos la linea
 		for (String linea : parteDeArriba) {
 			this.nuevaLinea(linea);
 		}
@@ -350,7 +360,13 @@ public class Fichero2 {
 			this.nuevaLinea(linea);
 		}
 	}
-	
+
+	public void borrarLineasQueContienen(String partonBorrar) {
+		int numeroDeOcurrencias = this.numeroDeOcurrencias(partonBorrar);
+		for (int i = 0; i < numeroDeOcurrencias; i++) {
+			this.borrarLinea(this.buscaUltimoElemento(partonBorrar));
+		}
+	}
 
 	/**
 	 * Devuelve el nombre del fichero sin ruta
